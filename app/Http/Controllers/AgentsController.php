@@ -45,12 +45,13 @@ class AgentsController extends Controller
      * @param  \App\Models\Agents  $agents
      * @return \Illuminate\Http\Response
      */
-    public function show(Agents $agents)
+    public function show()
     {
         foreach (Agents::all() as $table) {
             //echo $flight->name;
-           // return view('pages.agents', 'table'=>$table);
+            return view('pages.agents', ['table'=>$table]);
         }
+        return view('pages.agents');
 
 
     }
