@@ -47,12 +47,16 @@ class AgentsController extends Controller
      */
     public function show()
     {
-        foreach (Agents::all() as $table) {
-            //echo $flight->name;
-            return view('pages.agents', ['table'=>$table]);
-        }
-        return view('pages.agents');
+        // foreach (Agents::all() as $table) {
+        //     //echo $flight->name;
+        //     return view('pages.agents', ['table'=>$table]);
+        // }
 
+        $agents = Agents::
+                    orderBy('name')
+                    //->take(10)
+                    ->get();
+        return view('pages.agents', ['agents'=>$agents]);
 
     }
 

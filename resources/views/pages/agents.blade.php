@@ -26,7 +26,7 @@
                     <div class="iq-card iq-card-block iq-card-stretch iq-card-height">
                         <div class="iq-card-header d-flex justify-content-between">
                             <div class="iq-header-title">
-                                <h4 class="card-title"> M-PESA Transactions </h4>
+                                <h4 class="card-title"> Sales Agents </h4>
                             </div>
 
                         </div>
@@ -35,40 +35,37 @@
                                 <table class="table mb-0  display table table-responsive-sm table-bordered table-sm" id="dataTable">
                                     <thead>
                                     <tr>
-                                        <th scope="col">MerchantID</th>
-                                        <th scope="col">CheckoutID</th>
-                                        <th scope="col">Status</th>
-                                        <th scope="col">Result</th>
-                                        <th scope="col">Amount</th>
-                                        <th scope="col">MpesaReceipt</th>
+                                        <th scope="col">Agent ID</th>
+                                        <th scope="col">Names</th>
                                         <th scope="col">Phone</th>
+                                        <th scope="col">Region</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Transtxn</th>
                                         <th scope="col">Date</th>
                                     </tr>
                                     </thead>
                                     <tbody>
 
-                                    {{-- @foreach($table as $key => $data) --}}
+                                    @foreach($agents as $key => $data)
                                         <tr>
-                                            {{-- <td>{{$data->MerchantRequestID}}</td>
-                                            <td>{{$data->CheckoutRequestID}}</td>
+                                           <td>{{$data->uniqueId}}</td>
+                                            <td>{{$data->name}}</td>
+                                            <td>{{$data->phone}}</td>
+                                            <td>{{$data->region}}</td>
                                             <td>
-                                                @if($data->ResultCode == '0')
-                                                <div class="badge badge-pill badge-success">Success</div>
-                                                @elseif ($data->ResultCode !='0')
-                                                <div class="badge badge-pill badge-danger">Failed</div>
+                                                @if($data->status == '0')
+                                                <div class="badge badge-pill badge-primary">Active</div>
+                                                @elseif ($data->status !='0')
+                                                <div class="badge badge-pill badge-danger">Disabled</div>
                                                 @endif
 
                                             </td>
-                                            {{-- <td>{{$data->ResponseDescription}}</td> --}}
-                                            {{-- <td>{{$data->ResultDesc}}</td>
-                                            <td>{{ number_format($data->Amount)}}</td>
-                                            <td>{{$data->MpesaReceiptNumber}}</td>
-                                            <td>{{$data->PhoneNumber}}</td>
-                                            <td>{{$data->created_at}}</td> --}}
+                                            <td>{{ number_format(10)}}</td>
+                                            <td>{{$data->created_at}}</td>
 
 
                                         </tr>
-                                    {{-- @endforeach --}}
+                                    @endforeach
 
                                     </tbody>
                                 </table>
