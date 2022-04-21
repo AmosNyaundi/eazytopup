@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Agents;
 use App\Http\Requests\StoreAgentsRequest;
 use App\Http\Requests\UpdateAgentsRequest;
+use Illuminate\Support\Facades\Auth;
 
 class AgentsController extends Controller
 {
@@ -15,7 +16,15 @@ class AgentsController extends Controller
      */
     public function commission()
     {
-        //
+        if(Auth::check())
+        {
+            $agents = Agents::
+                    latest()
+                    ->get();
+
+            return view('pages.commission', ['agents'=>$agents]);
+        }
+        return redirect()->route('login');
     }
 
     /**
@@ -25,7 +34,7 @@ class AgentsController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.add_agent');
     }
 
     /**
@@ -36,7 +45,14 @@ class AgentsController extends Controller
      */
     public function store(StoreAgentsRequest $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'detail' => 'required',
+        ]);
+
+        Agents::create($request->all());
+
+        return redirect()->route('pages.index')->with('success','Agent created successfully.');
     }
 
     /**
@@ -47,16 +63,15 @@ class AgentsController extends Controller
      */
     public function show()
     {
-        // foreach (Agents::all() as $table) {
-        //     //echo $flight->name;
-        //     return view('pages.agents', ['table'=>$table]);
-        // }
-
-        $agents = Agents::
-                    orderBy('name')
-                    //->take(10)
+        if(Auth::check())
+        {
+            $agents = Agents::
+                    latest()
                     ->get();
-        return view('pages.agents', ['agents'=>$agents]);
+
+            return view('pages.agents', ['agents'=>$agents]);
+        }
+        return redirect()->route('login');
 
     }
 
@@ -89,8 +104,19 @@ class AgentsController extends Controller
      * @param  \App\Models\Agents  $agents
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Agents $agents)
+    // public function destroy(Agents $agents)
+    // {
+    //     $agents->delete();
+    //    // Agents::where('id', $agents)->delete();
+    //     return redirect()->route('agents')->with('success','Agent deleted successfully');
+    // }
+
+    public function destroy($id)
     {
-        //
-    }
+        $post = Agents::where('uniqueId', $id)->firstOrFail();
+
+        $post->delete();
+
+        return redirect()->route('agents')->with('danger','Agent deleted successfully');
+   }
 }

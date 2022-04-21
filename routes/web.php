@@ -42,6 +42,8 @@ Route::get('commission', [AgentsController::class, 'commission'])->name('commiss
 Route::get('create', [AgentsController::class, 'create'])->name('create');
 Route::post('create_agent', [AgentsController::class, 'create'])->name('create.agent');
 Route::get('agents', [AgentsController::class, 'show'])->name('agents');
+Route::resource('agent', AgentsController::class);
+Route::delete('agent/{id}', [AgentsController::class, 'destroy'])->name('delete');
 
 //SALES ROUTES
 Route::get('sales', [SalesController::class, 'show'])->name('sales');

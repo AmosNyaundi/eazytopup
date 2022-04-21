@@ -42,7 +42,7 @@
                                 Add Agent
                             </a>
                         </li>
-                        <li class="@yield('agents')">
+                        <li class="@yield('view')">
                             <a href="{{ route ('agents') }} ">
                                 <i class="las la-eye"></i>
                                 View Agents

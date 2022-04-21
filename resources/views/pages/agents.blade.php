@@ -1,7 +1,7 @@
 @extends('navigation.master')
 
 @section('agents','active')
-@section('agents','active')
+@section('view','active')
 
 @section('content')
     <!-- Page Content  -->
@@ -9,14 +9,20 @@
     <div id="content-page" class="content-page">
         <div class="container-fluid">
 
-            @if(session()->get('message') != '')
-                <div class="alert text-white bg-{{ session()->get('status') }}" role="alert">
+            {{-- @if(session()->get('success') != '')
+                <div class="alert text-white bg-primary" role="alert">
                     <div class="iq-alert-text">
-                        <p>{{ session()->get('message') }}</p>
+                        <p>{{ session()->get($message) }}</p>
                     </div>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <i class="ri-close-line"></i>
                     </button>
+                </div>
+            @endif --}}
+
+            @if ($message = Session::get('success'))
+                <div class="alert alert-success">
+                    <p>{{ $message }}</p>
                 </div>
             @endif
 
@@ -41,14 +47,15 @@
                                         <th scope="col">Region</th>
                                         <th scope="col">Status</th>
                                         <th scope="col">Transtxn</th>
-                                        <th scope="col">Date</th>
+                                        <th scope="col">Date Created</th>
+                                        <th scope="col">Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
 
                                     @foreach($agents as $key => $data)
                                         <tr>
-                                           <td>{{$data->uniqueId}}</td>
+                                           <td style="text-decoration: underline;"><a href="{{ route('agent.show',$data->uniqueId) }}">{{$data->uniqueId}}</a></td>
                                             <td>{{$data->name}}</td>
                                             <td>{{$data->phone}}</td>
                                             <td>{{$data->region}}</td>
@@ -62,13 +69,28 @@
                                             </td>
                                             <td>{{ number_format(10)}}</td>
                                             <td>{{$data->created_at}}</td>
+                                            <td>
+                                                <form  role="form" method="POST" action="{{ url('agent/'.$data->uniqueId) }}"
+                                                    onsubmit="return confirm('Are you sure you wish to delete agent ID {{$data->uniqueId}}?');">
+
+                                                        <div class="flex align-items-center list-user-action">
+                                                        <a class="iq-bg-primary" href="{{ route('agent.show',$data->uniqueId) }}"><i class="ri-eye-line"></i></a>
+                                                        <a class="iq-bg-warning" href="{{ route('agent.edit',$data->uniqueId) }}"><i class="ri-pencil-line"></i></a>
 
 
+                                                        @if ($data->id) {{ method_field('DELETE') }} @endif
+                                                        {!! csrf_field() !!}
+                                                        <button type="submit" class=" btn "><i class="ri-delete-bin-line iq-bg-danger"></i></button>
+
+                                                        </div>
+                                                </form>
+                                            </td>
                                         </tr>
                                     @endforeach
 
                                     </tbody>
                                 </table>
+
                             </div>
                         </div>
                     </div>

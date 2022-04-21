@@ -56,7 +56,7 @@
                 </ul>
             </div>
             <div class="col-lg-6 text-right">
-                <a href="https://chechi.co.ke" target="_blank">Chechi Ltd</a>.
+                <a href="https://eazytopup.co.ke" target="_blank">EazyTopup</a>
             </div>
         </div>
     </div>
