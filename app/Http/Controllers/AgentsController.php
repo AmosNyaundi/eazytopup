@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Agents;
+use App\Models\Commission;
+use App\Models\Clients;
+use Carbon\Carbon;
 use App\Http\Requests\StoreAgentsRequest;
 use App\Http\Requests\UpdateAgentsRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AgentsController extends Controller
 {
@@ -18,11 +22,14 @@ class AgentsController extends Controller
     {
         if(Auth::check())
         {
-            $agents = Agents::
-                    latest()
-                    ->get();
+            $commission = Commission::join('agents', 'agents.uniqueId', '=', 'commissions.uniqueId')
+                        ->select("*",Commission::raw('commissions.uniqueId, count(*) as cnt, SUM(commissions.amount) as total'))
+                        ->whereMonth('commissions.created_at', Carbon::now()->month)
+                        ->groupBy("commissions.uniqueId")
+                        ->orderBy('total', 'desc')
+                        ->get();
 
-            return view('pages.commission', ['agents'=>$agents]);
+            return view('pages.commission', ['commission'=>$commission]);
         }
         return redirect()->route('login');
     }
@@ -65,8 +72,12 @@ class AgentsController extends Controller
     {
         if(Auth::check())
         {
-            $agents = Agents::
-                    latest()
+
+            $agents = Agents::leftJoin('clients', 'agents.uniqueId', '=', 'clients.uniqueId')
+                    //->leftJoin('commissions', 'agents.uniqueId', '=', 'commissions.uniqueId')
+                    ->select("*",Agents::raw('agents.uniqueId, count(clients.uniqueId) as cnt,agents.created_at'))
+                    ->groupBy("agents.uniqueId")
+                    //->orderBy('cnt', 'desc')
                     ->get();
 
             return view('pages.agents', ['agents'=>$agents]);

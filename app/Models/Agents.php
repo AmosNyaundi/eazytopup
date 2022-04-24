@@ -21,4 +21,16 @@ class Agents extends Model
     //     'region',
     //     'status',
     // ];
+
+    // public function commission()
+    // {
+    //     return $this->belongsTo(Commission::class);
+    // }
+
+    // public function client()
+    // {
+    //     return $this->belongsTo(Clients::class);
+    // }
+
+
 }

@@ -46,7 +46,8 @@
                                         <th scope="col">Phone</th>
                                         <th scope="col">Region</th>
                                         <th scope="col">Status</th>
-                                        <th scope="col">Transtxn</th>
+                                        <th scope="col">Clients</th>
+                                        {{-- <th scope="col">Transactions</th> --}}
                                         <th scope="col">Date Created</th>
                                         <th scope="col">Action</th>
                                     </tr>
@@ -67,7 +68,8 @@
                                                 @endif
 
                                             </td>
-                                            <td>{{ number_format(10)}}</td>
+                                            <td>{{ number_format($data->cnt)}}</td>
+                                            {{-- <td>{{ number_format($data->tx)}}</td> --}}
                                             <td>{{$data->created_at}}</td>
                                             <td>
                                                 <form  role="form" method="POST" action="{{ url('agent/'.$data->uniqueId) }}"
@@ -78,7 +80,7 @@
                                                         <a class="iq-bg-warning" href="{{ route('agent.edit',$data->uniqueId) }}"><i class="ri-pencil-line"></i></a>
 
 
-                                                        @if ($data->id) {{ method_field('DELETE') }} @endif
+                                                        @if ($data->uniqueId) {{ method_field('DELETE') }} @endif
                                                         {!! csrf_field() !!}
                                                         <button type="submit" class=" btn "><i class="ri-delete-bin-line iq-bg-danger"></i></button>
 

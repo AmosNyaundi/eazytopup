@@ -17,92 +17,90 @@ class Dashboard extends Controller
 
             $user = auth()->user()->username;
 
-            $bal = DB::table('mpesa_txn')
-                    ->latest()
-                    ->first();
+            $customers = DB::table('purchase')
+                    ->count(DB::raw('DISTINCT msisdn'));
 
-            $total_trans = DB::table('air_txn')
-                        ->where(['responseStatus' => 200])
-                        ->whereMonth('created_at', Carbon::now()->week)
-                        ->count();
-
-            $total_air = DB::table('mpesa_txn')
-                        ->where('ResultCode', '=', 0)
-                        ->whereMonth('TransactionDate', Carbon::now()->month)
+            $sales = DB::table('purchase')
+                        ->where(['astatus' => 200])
+                        ->whereMonth('created_at', Carbon::now()->month)
                         ->sum('Amount');
 
-            $trans =    DB::table('mpesa_txn')
-                        ->where(['ResultCode' => 0])
-                        ->whereDate('TransactionDate', Carbon::today())
-                        ->count();
-
-            $air =      DB::table('mpesa_txn')
-                        ->where('ResultCode', '=', 0)
-                        ->whereDate('TransactionDate', Carbon::today())
+            $lastm1 = DB::table('purchase')
+                        ->where(['astatus' => 200])
+                        ->whereMonth('created_at', Carbon::now()->subMonth()->month)
                         ->sum('Amount');
 
+            $thism2 = DB::table('purchase')
+                        ->where(['astatus' => 200])
+                        ->whereMonth('created_at', Carbon::now()->month)
+                        ->sum('Amount');
 
-            $week2 =  DB::table('purchase')
-                        ->select(DB::raw('sum(amount) as sum'))
+            $profit = $sales - $lastm1;
+
+            $prev =    DB::table('purchase')
                         ->where(['astatus' => 200])
                         ->whereBetween('created_at',[Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->subWeek()->endOfWeek()])
-                    //->get();
-                        // ->select(
-                        //     DB::raw('COUNT(*) as sum'),
-                        //     DB::raw("DATE_FORMAT(created_at,'%M') as month")
-                        // )
-                        // ->groupBy('month')
-                        ->sum('amount');
-                        //->get();
-            $week1 = DB::table('purchase')
-                        ->select(DB::raw('sum(amount) as sum'))
+                        ->sum('Amount');
+
+            $last =     DB::table('purchase')
                         ->where(['astatus' => 200])
                         ->whereBetween('created_at',[Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
-                        ->sum('amount');
+                        ->sum('Amount');
 
-            $txn =  DB::table('mpesa_txn')
-                        ->where(['ResultCode' => 0])
+            $week2 =  DB::table('purchase')
+                        ->where(['astatus' => 200])
                         ->select(
                             DB::raw('sum(Amount) as sum'),
-                            DB::raw("DAY(created_at) as day")
+                            DB::raw("DATE_FORMAT(created_at,'%W') as day")
                         )
+                        ->whereBetween('created_at',[Carbon::now()->subWeek()->startOfWeek(), Carbon::now()->subWeek()->endOfWeek()])
+                        ->groupBy('day')
+                        ->get();
+
+            $week1 = DB::table('purchase')
+                        ->where(['astatus' => 200])
+                        ->select(
+                            DB::raw('sum(Amount) as sum'),
+                            DB::raw("DATE_FORMAT(created_at,'%W') as day")
+                        )
+                        ->whereBetween('created_at',[Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
                         ->groupBy('day')
                         ->get();
 
 
-
-            //$months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
-            $weeks = array('Mon','Tue','Wed','Thu','Fri','Sart','Sun');
+            $days = array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
             $thisweek = array();
             $lastweek = array();
-            foreach ($weeks as $week)
+            foreach ($days as $day)
             {
-                // $r = $week1->where('day', $week)->first();
-                // $count = isset($r) ? $r->sum : 0;
-                // array_push($thisweek, $count);
+                $r = $week1->where('day', $day)->first();
+                $count = isset($r) ? $r->sum : 0;
+                array_push($thisweek, $count);
 
-                $s = $txn->where('day', $week)->first();
+                $s = $week2->where('day', $day)->first();
                 $countS = isset($s) ? $s->sum : 0;
                 array_push($lastweek, $countS);
             }
 
             $chart = new UserChart();
-            $chart->labels($weeks);
+            $chart->labels($days);
+
             $chart->dataset("This Week", "line", $thisweek)
-                ->color('#1e3d73')
-                ->backgroundcolor('#1e3d73)')
+                ->color("rgb(255, 99, 132)")
+                ->backgroundcolor("rgb(255, 99, 132)")
                 ->fill(FALSE)
-                ->linetension(0.1);
-            $chart->dataset("Last Week", "line",$lastweek)
-                ->color("#fe517e")
-                ->backgroundcolor("#fe517e")
+                ->linetension(0.5);
+
+            $chart->dataset("Last Week", "line", $lastweek)
+                ->color("rgb(66,133,244)")
+                ->backgroundcolor("rgb(66,133,244)")
                 ->fill(FALSE)
-                ->linetension(0.1);
+                ->linetension(0.5);
 
             $chart->displayLegend(true);
 
 
-            return view('pages.home', compact('total_trans','trans','week1','week2','air','chart','bal'));
+            return view('pages.home', compact('prev','last','week1','week2','chart','customers','sales','profit'));
 
         }
 

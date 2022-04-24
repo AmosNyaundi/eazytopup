@@ -36,21 +36,21 @@
                                     <thead>
                                     <tr>
                                         <th scope="col">Agent ID</th>
-                                        <th scope="col">Names</th>
+                                        <th scope="col">Agent Name</th>
                                         <th scope="col">Transactions</th>
-                                        <th scope="col">Amount</th>
-                                        <th scope="col">Commission</th>
+                                        <th scope="col">Airtime Purchased</th>
+                                        <th scope="col">Commission (4%)</th>
                                     </tr>
                                     </thead>
                                     <tbody>
 
-                                    @foreach($agents as $key => $data)
+                                    @foreach($commission as $key => $data)
                                         <tr>
-                                           <td style="text-decoration: underline;"><a href="{{ route('agent.show',$data->uniqueId) }}">{{$data->uniqueId}}</a></td>
+                                            <td style="text-decoration: underline;"><a href="{{ route('agent.show',$data->uniqueId) }}">{{$data->uniqueId}}</a></td>
                                             <td>{{$data->name}}</td>
-                                            <td>{{$data->phone}}</td>
-                                            <td>{{$data->region}}</td>
-                                            <td>{{ number_format(1050)}}</td>
+                                            <td>{{$data->cnt}}</td>
+                                            <td>{{number_format($data->total)}}</td>
+                                            <td>{{number_format($data->total * 0.04)}}</td>
 
                                         </tr>
                                     @endforeach

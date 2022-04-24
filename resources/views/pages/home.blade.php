@@ -28,11 +28,11 @@
                           <div class="d-flex justify-content-around">
                              <div class="price-week-box mr-5">
                                 <span>This Week</span>
-                                <h3>KES <span class="counter">{{ number_format($week1) }}</span> <i class="ri-funds-line text-success font-size-18"></i></h3>
+                                <h3>KES <span class="counter">{{ number_format($last) }}</span> <i class="ri-funds-line text-primary font-size-18"></i></h3>
                              </div>
                              <div class="price-week-box">
                                 <span>Last Week</span>
-                                <h3>KES <span class="counter">{{ number_format($week2) }}</span><i class="ri-funds-line text-danger font-size-18"></i></h3>
+                                <h3>KES <span class="counter">{{ number_format($prev) }}</span><i class="ri-funds-line text-danger font-size-18"></i></h3>
                              </div>
                           </div>
                        </div>
@@ -52,8 +52,8 @@
                                    </div>
                                 </div>
                                 <div class="col-lg-12 mt-3">
-                                   <h6 class="card-title text-uppercase text-secondary mb-0">Customer</h6>
-                                   <span class="h2 text-dark mb-0 counter d-inline-block w-100">60,586</span>
+                                   <h6 class="card-title text-uppercase text-secondary mb-0">Customers</h6>
+                                   <span class="h2 text-dark mb-0 counter d-inline-block w-100">{{ number_format($customers) }}</span>
                                 </div>
                              </div>
                              <p class="mb-0 text-muted mt-3">
@@ -73,7 +73,7 @@
                                 </div>
                                 <div class="col-lg-12 mt-3">
                                    <h6 class="card-title text-uppercase text-secondary mb-0">Sales</h6>
-                                   <span class="h2 text-dark mb-0 counter d-inline-block w-100">80,586</span>
+                                   <span class="h2 text-dark mb-0 counter d-inline-block w-100">{{number_format($sales) }}</span>
                                 </div>
                              </div>
                              <p class="mb-0 text-muted mt-3">
@@ -93,7 +93,7 @@
                                 </div>
                                 <div class="col-lg-12 mt-3">
                                    <h6 class="card-title text-uppercase text-secondary mb-0">Profit</h6>
-                                   <span class="h2 text-dark mb-0 d-inline-block w-100"><span class="counter">80</span>%</span>
+                                   <span class="h2 text-dark mb-0 d-inline-block w-100"><span class="counter">{{ number_format($profit)}}
                                 </div>
                              </div>
                              <p class="mb-0 text-muted mt-3">
