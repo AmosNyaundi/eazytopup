@@ -9,7 +9,7 @@ class Commission extends Model
 {
     use HasFactory;
 
-    protected $table = 'commissions';
+    protected $table = 'purchase';
 
     public function client()
     {

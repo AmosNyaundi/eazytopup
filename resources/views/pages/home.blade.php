@@ -52,8 +52,8 @@
                                    </div>
                                 </div>
                                 <div class="col-lg-12 mt-3">
-                                   <h6 class="card-title text-uppercase text-secondary mb-0">Customers</h6>
-                                   <span class="h2 text-dark mb-0 counter d-inline-block w-100">{{ number_format($customers) }}</span>
+                                   <h6 class="card-title text-uppercase text-secondary mb-0">Agents</h6>
+                                   <span class="h2 text-dark mb-0 counter d-inline-block w-100">{{ number_format($agents) }}</span>
                                 </div>
                              </div>
                              <p class="mb-0 text-muted mt-3">
@@ -113,7 +113,7 @@
                                 </div>
                                 <div class="col-lg-12 mt-3">
                                    <h6 class="card-title text-uppercase text-secondary mb-0">Loss</h6>
-                                   <span class="h2 text-dark mb-0 d-inline-block w-100"><span class="counter">15</span>%</span>
+                                   <span class="h2 text-dark mb-0 d-inline-block w-100"><span class="counter">{{$thism2}}</span>%</span>
                                 </div>
                              </div>
                              <p class="mb-0 text-muted mt-3">

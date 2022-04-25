@@ -17,8 +17,8 @@ class Dashboard extends Controller
 
             $user = auth()->user()->username;
 
-            $customers = DB::table('purchase')
-                    ->count(DB::raw('DISTINCT msisdn'));
+            $agents = DB::table('agents')
+                        ->count(DB::raw('DISTINCT uniqueId'));
 
             $sales = DB::table('purchase')
                         ->where(['astatus' => 200])
@@ -32,7 +32,7 @@ class Dashboard extends Controller
 
             $thism2 = DB::table('purchase')
                         ->where(['astatus' => 200])
-                        ->whereMonth('created_at', Carbon::now()->month)
+                        ->whereMonth('created_at', Carbon::now()->subMonth(2)->month)
                         ->sum('Amount');
 
             $profit = $sales - $lastm1;
@@ -100,7 +100,7 @@ class Dashboard extends Controller
             $chart->displayLegend(true);
 
 
-            return view('pages.home', compact('prev','last','week1','week2','chart','customers','sales','profit'));
+            return view('pages.home', compact('prev','last','week1','week2','chart','agents','sales','profit','lastm1','thism2'));
 
         }
 

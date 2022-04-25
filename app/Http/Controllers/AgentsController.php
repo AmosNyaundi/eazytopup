@@ -22,11 +22,11 @@ class AgentsController extends Controller
     {
         if(Auth::check())
         {
-            $commission = Commission::join('agents', 'agents.uniqueId', '=', 'commissions.uniqueId')
-                        ->select("*",Commission::raw('commissions.uniqueId, count(*) as cnt, SUM(commissions.amount) as total'))
-                        ->whereMonth('commissions.created_at', Carbon::now()->month)
-                        ->groupBy("commissions.uniqueId")
-                        ->orderBy('total', 'desc')
+            $commission = Commission::join('agents', 'agents.uniqueId', '=', 'purchase.uniqueId')
+                        ->select("*",Commission::raw('purchase.uniqueId, count(*) as cnt, SUM(purchase.amount) as total'))
+                        ->whereMonth('purchase.created_at', Carbon::now()->month)
+                        ->groupBy("purchase.uniqueId")
+                        //->orderBy('total', 'desc')
                         ->get();
 
             return view('pages.commission', ['commission'=>$commission]);
